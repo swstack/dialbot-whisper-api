@@ -1,0 +1,19 @@
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.12
+
+    - name: Install Poetry
+      run: curl -sSL https://install.python-poetry.org | python3 -
+      shell: bash
+
+    - name: Add Poetry to PATH
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: Install project dependencies
+      run: poetry install
+      shell: bash
