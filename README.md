@@ -17,6 +17,13 @@ poetry install --no-root
 ## Run app
 
 ```bash
+cd dialbot
 poetry run flask run
+```
 
+## Run tests
+
+```bash
+cd tests
+poetry run python run.py
 ```
