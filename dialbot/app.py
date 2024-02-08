@@ -12,5 +12,6 @@ app.register_blueprint(transcribe_bp, url_prefix='/api/v1')
 with app.app_context():
     app.openai = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+
 if __name__ == '__main__':
     app.run()

@@ -1,7 +1,5 @@
 import unittest
 
-from dialbot.app import app  # Replace with your Flask app instance
-from tests import *       # Import your test modules
 
 if __name__ == '__main__':
     loader = unittest.TestLoader()
