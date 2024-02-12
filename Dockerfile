@@ -3,30 +3,14 @@ FROM python:3.10.12-slim
 ARG OPENAI_API_KEY
 ENV OPENAI_API_KEY=$OPENAI_API_KEY
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app/
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python -
-
-# Install gunicorn
-RUN pip install gunicorn
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy only the dependency files to leverage Docker cache
-COPY pyproject.toml /app
+# Setup application
+COPY requirements.txt /app
 COPY ./dialbot /app/dialbot
+RUN pip install -r /app/requirements.txt
 
-# Install project dependencies
-RUN ~/.local/bin/poetry install --no-root --no-dev
-
-# Expose the Flask port
+# Setup Gunicorn
+RUN pip install gunicorn
 EXPOSE 5000
-
-# Command to run the Flask application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "dialbot:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "dialbot.app:app"]
