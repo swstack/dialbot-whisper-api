@@ -1,5 +1,8 @@
 FROM python:3.10.12-slim
 
+ARG OPENAI_API_KEY
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

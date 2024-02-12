@@ -1,4 +1,4 @@
-name: Deploy
+name: Main branch
 
 on:
   push:
@@ -9,12 +9,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Build and test the app
       - name: Checkout code
         uses: actions/checkout@v2
       - uses: ./.github/actions/setup
       - name: Run tests
         run: cd tests/ && poetry run python run.py
-      - name: Build and publish
+
+      # Build docker image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Docker build
+        run: docker build --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} -t dialbot:latest .
+#      - name: Docker Publish
+#        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      # Manually publish docker image to server
+      - name: Configure SSH
         run: |
-         poetry build
-#         poetry publish --build
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DIALBOT_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DIALBOT_SERVER_HOST }} >> ~/.ssh/known_hosts

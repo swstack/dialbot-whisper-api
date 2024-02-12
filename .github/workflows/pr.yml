@@ -1,4 +1,4 @@
-name: Test
+name: Branch PRs
 
 on:
   pull_request:
@@ -14,5 +14,3 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Run tests
         run: cd tests/ && poetry run python test_transcribe.py
-      - name: Build and publish
-        run: poetry build
