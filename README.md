@@ -32,3 +32,8 @@ Build docker image:
 poetry export -f requirements.txt --output requirements.txt &&
 docker build --build-arg OPENAI_API_KEY=$OPENAI_API_KEY -t dialbot:latest .
 ```
+
+Run docker image:
+```bash
+docker run -p 5000:5000 dialbot:latest
+```

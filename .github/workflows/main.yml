@@ -26,7 +26,7 @@ jobs:
       - name: Save docker image to tarball
         run: docker save dialbot:latest -o dialbot-docker-image.tar
 
-      # Manually publish docker image to server
+      # Manually publish and load docker image to server
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
@@ -35,3 +35,13 @@ jobs:
           ssh-keyscan -H ${{ secrets.DIALBOT_SERVER_HOST }} >> ~/.ssh/known_hosts
       - name: Scp docker image to server
         run: scp -i ~/.ssh/id_rsa dialbot-docker-image.tar root@${{ secrets.DIALBOT_SERVER_HOST }}:/home/dialbot-docker-image.tar
+      - name: Load docker image on server
+        run: ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "docker load -i /home/dialbot-docker-image.tar"
+
+      # Setup docker image in systemd
+      - name: Setup systemd service
+        run: |
+          scp -i ~/.ssh/id_rsa -f dialbot.service root@${{ secrets.DIALBOT_SERVER_HOST }}:/etc/systemd/system/dialbot.service
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl daemon-reload"
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl enable dialbot"
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl start dialbot"
