@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dialbot"
-version = "0.1.0"
+version = "0.0.2"
 description = ""
 authors = ["Stephen Stack <sfstack7500@gmail.com>"]
 readme = "README.md"

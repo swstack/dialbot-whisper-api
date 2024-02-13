@@ -7,4 +7,4 @@ health_bp = Blueprint('health', __name__)
 def health():
 
     # TODO: Return real information about the health of the service
-    return jsonify({'status': 'healthy', 'version': '0.0.1', 'git': '1234567'})
+    return jsonify({'status': 'healthy', 'version': '0.0.2', 'git': '1234567'})

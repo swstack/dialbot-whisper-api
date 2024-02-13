@@ -26,13 +26,15 @@ jobs:
       - name: Save docker image to tarball
         run: docker save dialbot:latest -o dialbot-docker-image.tar
 
-      # Manually publish and load docker image to server
+      # Setup SSH access with the server
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.DIALBOT_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.DIALBOT_SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      # Push docker image to server
       - name: Scp docker image to server
         run: scp -i ~/.ssh/id_rsa dialbot-docker-image.tar root@${{ secrets.DIALBOT_SERVER_HOST }}:/home/dialbot-docker-image.tar
       - name: Load docker image on server
@@ -43,5 +45,10 @@ jobs:
         run: |
           scp -i ~/.ssh/id_rsa dialbot.service root@${{ secrets.DIALBOT_SERVER_HOST }}:/etc/systemd/system/dialbot.service
           ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl daemon-reload"
-          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl enable dialbot"
-          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl start dialbot"
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl restart dialbot"
+
+      # Cleanup old docker images and containers
+      - name: Cleanup old docker images
+        run: |
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "docker image prune -f"
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "docker container prune -f"
