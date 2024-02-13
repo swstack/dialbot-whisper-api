@@ -1,6 +1,14 @@
 runs:
   using: "composite"
   steps:
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/poetry
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:

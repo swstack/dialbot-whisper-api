@@ -41,7 +41,7 @@ jobs:
       # Setup docker image in systemd
       - name: Setup systemd service
         run: |
-          scp -i ~/.ssh/id_rsa -f dialbot.service root@${{ secrets.DIALBOT_SERVER_HOST }}:/etc/systemd/system/dialbot.service
+          scp -i ~/.ssh/id_rsa dialbot.service root@${{ secrets.DIALBOT_SERVER_HOST }}:/etc/systemd/system/dialbot.service
           ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl daemon-reload"
           ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl enable dialbot"
           ssh -i ~/.ssh/id_rsa root@${{ secrets.DIALBOT_SERVER_HOST }} "systemctl start dialbot"
