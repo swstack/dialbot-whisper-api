@@ -14,10 +14,8 @@ class TestTranscribeEndpoint(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.text = "foobar"
         with app.app_context():
-            app.openai.audio.transcriptions.create = MagicMock(
-                return_value=mock_response)
-
-        os.environ['OPENAI_API_KEY'] = "fake-key"
+            app.openai = MagicMock()
+            app.openai.audio.transcriptions.create = MagicMock(return_value=mock_response)
 
     def test_transcribe_endpoint(self):
         with open('tests/resources/test-data.mp3', 'rb') as audio_file:

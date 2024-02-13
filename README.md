@@ -15,14 +15,11 @@ poetry install --no-root
 
 Run the flask application:
 ```bash
-cd dialbot
-poetry run flask run
-```
+poetry run flask --app dialbot/prod.py run```
 
 Run the tests:
 ```bash
-cd tests
-poetry run python run.py
+poetry run python tests/run.py
 ```
 
 ## Build and run docker image locally
