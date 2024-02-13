@@ -20,7 +20,7 @@ class TestTranscribeEndpoint(unittest.TestCase):
         os.environ['OPENAI_API_KEY'] = "fake-key"
 
     def test_transcribe_endpoint(self):
-        with open('resources/test-data.mp3', 'rb') as audio_file:
+        with open('tests/resources/test-data.mp3', 'rb') as audio_file:
             response = self.app.post('/api/v1/transcribe', data={'audio': audio_file})
 
         self.assertEqual(response.status_code, 200)
