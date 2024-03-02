@@ -12,6 +12,8 @@ Install python dependencies:
 poetry install --no-root
 ```
 
+Replace the .env file with the correct values for your environment.
+
 ## Run the tests
 
 Run the tests:

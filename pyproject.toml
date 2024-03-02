@@ -10,6 +10,8 @@ python = "^3.10"
 flask = "^3.0.1"
 openai = "^1.11.1"
 gunicorn = "^21.2.0"
+pyjwt = "^2.8.0"
+python-dotenv = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]

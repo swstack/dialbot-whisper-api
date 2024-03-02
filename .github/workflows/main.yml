@@ -22,7 +22,11 @@ jobs:
       - name: Export requirements.txt
         run: poetry export -f requirements.txt --output requirements.txt
       - name: Docker build
-        run: docker build --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} -t dialbot:latest .
+        run: >
+          docker build
+          --build-arg DIALBOT_OPENAI_API_KEY=${{ secrets.DIALBOT_OPENAI_API_KEY }}
+          --build-arg DIALBOT_AUTH_SECRET_KEY=${{ secrets.DIALBOT_AUTH_SECRET_KEY }}
+          -t dialbot:latest .
       - name: Save docker image to tarball
         run: docker save dialbot:latest -o dialbot-docker-image.tar
 

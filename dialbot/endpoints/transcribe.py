@@ -1,9 +1,12 @@
 from flask import Blueprint, request, jsonify, current_app
 
+from dialbot.util.auth import token_required
+
 transcribe_bp = Blueprint('transcribe', __name__)
 
 
 @transcribe_bp.route('/transcribe', methods=['POST'])
+@token_required
 def transcribe():
     mp3_file = request.files['audio']
 
